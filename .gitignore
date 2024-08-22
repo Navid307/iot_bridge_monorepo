@@ -1,3 +1,5 @@
 
 rust_ble/target/*
 rust_ble/Cargo.lock
+esp32_peripheral/build/*
+esp32_central/build/*
