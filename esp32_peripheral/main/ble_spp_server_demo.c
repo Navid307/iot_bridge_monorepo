@@ -419,6 +419,7 @@ static void spp_uart_init(void)
 #ifdef SUPPORT_HEARTBEAT
 void spp_heartbeat_task(void * arg)
 {
+    // Heart beat task
     uint16_t cmd_id;
 
     for(;;) {
@@ -427,9 +428,9 @@ void spp_heartbeat_task(void * arg)
             while(1){
                 heartbeat_count_num++;
                 vTaskDelay(5000/ portTICK_PERIOD_MS);
-                if((heartbeat_count_num >3)&&(is_connected)){
-                    esp_ble_gap_disconnect(spp_remote_bda);
-                }
+                //if((heartbeat_count_num >3)&&(is_connected)){
+                //    esp_ble_gap_disconnect(spp_remote_bda);
+                //}
                 if(is_connected && enable_heart_ntf){
                     esp_ble_gatts_send_indicate(spp_gatts_if, spp_conn_id, spp_handle_table[SPP_IDX_SPP_HEARTBEAT_VAL],sizeof(heartbeat_s), heartbeat_s, false);
                 }else if(!is_connected){
@@ -444,6 +445,7 @@ void spp_heartbeat_task(void * arg)
 
 void spp_cmd_task(void * arg)
 {
+    // Command task
     uint8_t * cmd_id;
 
     for(;;){
@@ -459,7 +461,7 @@ void spp_cmd_task(void * arg)
 static void spp_task_init(void)
 {
     spp_uart_init();
-
+    // Two task starts here!!
 #ifdef SUPPORT_HEARTBEAT
     cmd_heartbeat_queue = xQueueCreate(10, sizeof(uint32_t));
     xTaskCreate(spp_heartbeat_task, "spp_heartbeat_task", 2048, NULL, 10, NULL);
