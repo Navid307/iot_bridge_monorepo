@@ -1,0 +1,12 @@
+
+rust_ble/target/*
+rust_ble/Cargo.lock
+esp32_peripheral/build/*
+esp32_central/build/*
+Yocto/build/cache/*
+Yocto/build/downloads/*
+Yocto/build/sstate-cache/*
+Yocto/build/tmp/*
+.*
+Yocto/build/bitbake-cookerdaemon.log
+Yocto/build/conf/templateconf.cfg
