@@ -1,0 +1,14 @@
+[submodule "Yocto/poky"]
+	path = Yocto/poky
+	url = git://git.yoctoproject.org/poky.git
+	branch = dunfell
+
+[submodule "Yocto/meta-openembedded"]
+	path = Yocto/meta-openembedded
+	url = git://git.openembedded.org/meta-openembedded.git
+	branch = dunfell
+
+[submodule "Yocto/meta-raspberrypi"]
+	path = Yocto/meta-raspberrypi
+	url = git://git.yoctoproject.org/meta-raspberrypi.git
+	branch = dunfell
