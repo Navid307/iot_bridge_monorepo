@@ -10,3 +10,6 @@ Yocto/build/tmp/*
 .*
 Yocto/build/bitbake-cookerdaemon.log
 Yocto/build/conf/templateconf.cfg
+
+dbus_exchange/build/*
+ble/target/*
