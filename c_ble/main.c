@@ -26,9 +26,7 @@
 #include <stdlib.h>
 #include <sys/queue.h>
 
-//#ifdef GATTLIB_LOG_BACKEND_SYSLOG
 #include <syslog.h>
-//#endif
 
 #include "gattlib.h"
 
@@ -37,7 +35,6 @@
 static const char* adapter_name;
 
 static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 
 static void ble_discovered_device(gattlib_adapter_t* adapter, const char* addr, const char* name, void *user_data) {
 	int ret;
@@ -70,7 +67,6 @@ static void* ble_task(void* arg) {
 
 	gattlib_adapter_scan_disable(adapter);
 
-	puts("Scan completed");
 	pthread_mutex_unlock(&g_mutex);
 EXIT:
 	gattlib_adapter_close(adapter);
