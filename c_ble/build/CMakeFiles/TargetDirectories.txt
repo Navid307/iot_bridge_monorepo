@@ -1,0 +1,3 @@
+/home/navid/Github/iot_bridge_monorepo/c_ble/build/CMakeFiles/main.dir
+/home/navid/Github/iot_bridge_monorepo/c_ble/build/CMakeFiles/edit_cache.dir
+/home/navid/Github/iot_bridge_monorepo/c_ble/build/CMakeFiles/rebuild_cache.dir
