@@ -111,27 +111,13 @@ static void ble_discovered_device(gattlib_adapter_t* adapter, const char* addr, 
 	struct connection_t *connection;
 	int ret;
 
-	if (name) {
+	if (name == NULL){
+		return;
+	}
+
+	if(strcmp(name, "Nordic_UART_Service") == 0){
 		printf("Discovered %s - '%s'\n", addr, name);
-	} else {
-		printf("Discovered %s\n", addr);
 	}
-
-	connection = calloc(sizeof(struct connection_t), 1);
-	if (connection == NULL) {
-		GATTLIB_LOG(GATTLIB_ERROR, "Failt to allocate connection.");
-		return;
-	}
-	connection->addr = strdup(addr);
-	connection->adapter = adapter;
-
-	ret = pthread_create(&connection->thread, NULL,	ble_connect_device, connection);
-	if (ret != 0) {
-		GATTLIB_LOG(GATTLIB_ERROR, "Failt to create BLE connection thread.");
-		free(connection);
-		return;
-	}
-	LIST_INSERT_HEAD(&g_ble_connections, connection, entries);
 }
 
 static void* ble_task(void* arg) {
