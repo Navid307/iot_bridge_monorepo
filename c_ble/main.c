@@ -83,8 +83,6 @@ int main(int argc, const char *argv[]) {
 	openlog("gattlib_ble_scan", LOG_CONS | LOG_NDELAY | LOG_PERROR, LOG_USER);
 	setlogmask(LOG_UPTO(LOG_INFO));
 
-	LIST_INIT(&g_ble_connections);
-
 	ret = gattlib_mainloop(ble_task, NULL);
 	if (ret != GATTLIB_SUCCESS) {
 		GATTLIB_LOG(GATTLIB_ERROR, "Failed to create gattlib mainloop");
