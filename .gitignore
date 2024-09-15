@@ -13,3 +13,5 @@ Yocto/build/conf/templateconf.cfg
 
 dbus_exchange/build/*
 ble/target/*
+
+c_ble/build/*
