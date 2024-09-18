@@ -3,7 +3,6 @@
 #include <pthread.h>
 #include <string.h>
 
-#include "scan.h"
 #include "nus.h"
 
 #ifdef GATTLIB_LOG_BACKEND_SYSLOG
@@ -17,18 +16,7 @@ int main(){
 	setlogmask(LOG_UPTO(LOG_INFO));
 #endif
     
-    pthread_t thid;
-    void *ret;
-
-    if (pthread_create(&thid, NULL, nus_scan_connect, NULL) != 0) {
-        perror("pthread_create() error");
-        exit(1);
-    }
-
-    if (pthread_join(thid, &ret) != 0) {
-        perror("pthread_create() error");
-        exit(3);
-    }
+    nus_scan_connect();
 
     return 0;
 }

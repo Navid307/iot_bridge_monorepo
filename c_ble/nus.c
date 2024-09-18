@@ -144,7 +144,7 @@ static void ble_discovered_device(gattlib_adapter_t* adapter, const char* addr, 
 }
 
 static void* ble_task(void* arg) {
-	char* addr = arg;
+	char* addr;
 	gattlib_adapter_t* adapter;
 	int ret;
 
