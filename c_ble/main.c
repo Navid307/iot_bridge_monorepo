@@ -1,6 +1,6 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <string.h>
 
 #include "nus.h"
@@ -9,14 +9,13 @@
 #include <syslog.h>
 #endif
 
-int main(){
-    
+int main() {
 #ifdef GATTLIB_LOG_BACKEND_SYSLOG
-	openlog("gattlib_nordic_uart", LOG_CONS | LOG_NDELAY | LOG_PERROR, LOG_USER);
-	setlogmask(LOG_UPTO(LOG_INFO));
+  openlog("gattlib_nordic_uart", LOG_CONS | LOG_NDELAY | LOG_PERROR, LOG_USER);
+  setlogmask(LOG_UPTO(LOG_INFO));
 #endif
-    
-    nus_scan_connect();
 
-    return 0;
+  nus_scan_connect();
+
+  return 0;
 }
