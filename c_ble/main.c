@@ -5,6 +5,8 @@
 
 #include "nus.h"
 
+//#define GATTLIB_LOG_BACKEND_SYSLOG 
+
 #ifdef GATTLIB_LOG_BACKEND_SYSLOG
 #include <syslog.h>
 #endif
@@ -12,7 +14,7 @@
 int main() {
 #ifdef GATTLIB_LOG_BACKEND_SYSLOG
   openlog("gattlib_nordic_uart", LOG_CONS | LOG_NDELAY | LOG_PERROR, LOG_USER);
-  setlogmask(LOG_UPTO(LOG_INFO));
+  setlogmask(LOG_UPTO(LOG_DEBUG));
 #endif
 
   nus_scan_connect();

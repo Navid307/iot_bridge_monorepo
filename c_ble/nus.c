@@ -31,6 +31,22 @@ static void int_handler(int dummy) {
   exit(0);
 }
 
+static void on_device_disconnect(gattlib_connection_t *connection,
+                                 void *user_data) {
+  GATTLIB_LOG(GATTLIB_INFO, "Device disconnected.");
+
+  // Disconnect the device if not already done
+  if (m_connection) {
+    gattlib_disconnect(m_connection, false /* wait_disconnection */);
+    m_connection = NULL;
+  }
+
+  // Signal the termination of the connection
+  pthread_mutex_lock(&m_connection_terminated_lock);
+  pthread_cond_signal(&m_connection_terminated);
+  pthread_mutex_unlock(&m_connection_terminated_lock);
+}
+
 static void on_device_connect(gattlib_adapter_t *adapter, const char *dst,
                               gattlib_connection_t *connection, int error,
                               void *user_data) {
@@ -39,6 +55,8 @@ static void on_device_connect(gattlib_adapter_t *adapter, const char *dst,
   char input[256];
   char *input_ptr;
   int ret, total_length, length = 0;
+
+  gattlib_register_on_disconnect(connection, on_device_disconnect, NULL);
 
   // Convert characteristics to their respective UUIDs
   ret = gattlib_string_to_uuid(NUS_CHARACTERISTIC_TX_UUID,
@@ -154,7 +172,7 @@ static void ble_discovered_device(gattlib_adapter_t *adapter, const char *addr,
   }
 }
 
-static void *ble_task(void *arg) {
+static void *ble_task() {
   char *addr;
   gattlib_adapter_t *adapter;
   int ret;
