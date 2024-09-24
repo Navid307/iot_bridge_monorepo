@@ -49,7 +49,8 @@ static void on_device_disconnect(gattlib_connection_t *connection,
 
 static void on_device_connect(gattlib_adapter_t *adapter, const char *dst,
                               gattlib_connection_t *connection, int error,
-                              void *user_data) {
+                              void(user_data)(const uuid_t *, const uint8_t *,
+                                              size_t, void *)) {
   uuid_t nus_characteristic_tx_uuid;
   uuid_t nus_characteristic_rx_uuid;
   char input[256];
@@ -108,7 +109,7 @@ static void on_device_connect(gattlib_adapter_t *adapter, const char *dst,
   //
   // Listen for Nordic UART TX GATT characteristic
   //
-  ret = gattlib_register_notification(connection, notification_handler, NULL);
+  ret = gattlib_register_notification(connection, user_data, NULL);
   if (ret) {
     GATTLIB_LOG(GATTLIB_ERROR, "Fail to register notification callback.");
     goto FREE_GATT_CHARACTERISTICS;
@@ -154,8 +155,9 @@ EXIT:
   pthread_mutex_unlock(&m_connection_terminated_lock);
 }
 
-static void ble_discovered_device(gattlib_adapter_t *adapter, const char *addr,
-                                  const char *name, void *user_data) {
+static void ble_discovered_device(
+    gattlib_adapter_t *adapter, const char *addr, const char *name,
+    void(user_data)(const uuid_t *, const uint8_t *, size_t, void *)) {
   int ret;
 
   if (name == NULL) {
@@ -164,7 +166,7 @@ static void ble_discovered_device(gattlib_adapter_t *adapter, const char *addr,
 
   if (strcmp(name, "Nordic_UART_Service") == 0) {
     ret = gattlib_connect(adapter, addr, GATTLIB_CONNECTION_OPTIONS_NONE,
-                          on_device_connect, NULL);
+                          on_device_connect, user_data);
     if (ret != GATTLIB_SUCCESS) {
       GATTLIB_LOG(GATTLIB_ERROR,
                   "Failed to connect to the bluetooth device '%s'", addr);
@@ -172,7 +174,8 @@ static void ble_discovered_device(gattlib_adapter_t *adapter, const char *addr,
   }
 }
 
-static void *ble_task() {
+static void *ble_task(void(cb)(const uuid_t *, const uint8_t *, size_t,
+                               void *)) {
   char *addr;
   gattlib_adapter_t *adapter;
   int ret;
@@ -184,7 +187,7 @@ static void *ble_task() {
   }
 
   ret = gattlib_adapter_scan_enable(adapter, ble_discovered_device,
-                                    BLE_SCAN_TIMEOUT, NULL);
+                                    BLE_SCAN_TIMEOUT, cb);
   if (ret) {
     GATTLIB_LOG(GATTLIB_ERROR, "Failed to scan.");
     return NULL;
@@ -198,10 +201,11 @@ static void *ble_task() {
   return NULL;
 }
 
-int nus_scan_connect(void) {
+int nus_scan_connect(void(cb)(const uuid_t *, const uint8_t *, size_t,
+                              void *)) {
   int ret;
 
-  ret = gattlib_mainloop(ble_task, NULL);
+  ret = gattlib_mainloop(ble_task, cb);
   if (ret != GATTLIB_SUCCESS) {
     GATTLIB_LOG(GATTLIB_ERROR, "Failed to create gattlib mainloop");
   }
