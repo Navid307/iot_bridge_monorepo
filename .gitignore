@@ -16,3 +16,4 @@ ble/target/*
 
 c_ble/build/*
 rust_dbus_server/target/*
+dashboard-rust/target/*
