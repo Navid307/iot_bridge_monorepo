@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package example;
+
+message Message {
+  string text1 = 1;
+  double var1 = 2;
+  double var2 = 3;
+  double var3 = 4;
+}

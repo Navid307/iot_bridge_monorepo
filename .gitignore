@@ -10,3 +10,11 @@ Yocto/build/tmp/*
 .*
 Yocto/build/bitbake-cookerdaemon.log
 Yocto/build/conf/templateconf.cfg
+
+dbus_exchange/build/*
+ble/target/*
+
+c_ble/build/*
+rust_dbus_server/target/*
+dashboard-rust/target/*
+dashboard-rust/Cargo.lock
